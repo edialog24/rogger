@@ -1,5 +1,7 @@
-require('../lib/index');
-Rogger.configure();
-Rogger.log('info','Global');
-var blogger = new Rogger.Logger();
-blogger.log('info','first logger');
+require('../lib/index')({url:'amqp://localhost'},{level:'debug'})
+    .then((amqp) => {
+        Rogger.log('info','Global logger');
+        let blogger = new Rogger.Logger();
+        blogger.log('info','Custom logger');
+    })
+    .catch((err) => {console.error(err);});
