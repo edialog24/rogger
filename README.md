@@ -2,23 +2,27 @@
 
 Rogger is a library that uses our winston-amqplib for sending messages to rabbit, it's mainly used for logging into the elk stack.
 
-# examples
+# example
 ```
-require('../lib/index');
-//one of the following to connect
-Rogger.configure({level:'error'},{url:'amqp://localhost'});
-Rogger.configure({level:'error'},{connection:connectionObj});
-Rogger.configure({level:'error'},{channel:channelObj});
+//Instantiate rogger
+require('rogger')({url:'amqp://localhost' || connection:'rabbitconnection' || channel:'rabbitchannel'},{
+level:'debug',
+type:'customtype',
+clevel:'console level, defaults to level if not specified',
+source:'Define a source so you can recognise the logs'
+})
+.then((amq) => {
+        Rogger.log('info','Global info');
+        Rogger.debug('Global debug');
+        Rogger.info('Global info');
+        Rogger.error('Global error');
+        //New instance, Rogger.Logger can also specify another object after the first to specify custom rabbit connections
+        const rogger = new Rogger.Logger({level: 'debug', type: 'express'});
+        rogger.log('info','info message');
+        rogger.debug('debug message');
+        rogger.info('info','info message');
+        rogger.error('error','error message');
 
-
-//Global logger
-Rogger.log('info','Global');
-Rogger.debug('Global Debug log');
-Rogger.info('Global Info log');
-
-//New instance
-var blogger = new Rogger.Logger({},{url:'amqp://localhost'});
-blogger.log('info','log');
-blogger.debug('Debug log');
-blogger.info('Info log');
+    })
+    .catch((err) => console.error(err));
 ```
